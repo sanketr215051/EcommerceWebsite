@@ -1,0 +1,40 @@
+.owl-carousel .item{
+    /* border: 1px solid black; */
+    font-size: 24px;
+    text-align: center;
+    margin-top: 20px;
+}
+   
+.owl-next{float:right;
+    margin-bottom: 100px !important;
+}
+.owl-prev{
+    float:left;
+    margin-bottom: 100px !important;
+}
+.owl-prev span{
+    font-size: 30px;
+    font-weight: bold;
+}
+   
+   
+.owl-next span{
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.owl-nav{
+    position: relative;
+}
+.owl-prev{
+    position: absolute;
+    bottom: 50px;
+    left:-20px;
+    font-size: 30px !important;
+}
+.owl-next{
+    position: absolute;
+    bottom: 50px;
+    right:0;
+    font-size: 30px !important;
+}

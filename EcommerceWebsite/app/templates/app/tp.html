@@ -1,0 +1,115 @@
+<script>
+
+    if(!MDWNonce100){
+        
+    var MDWNonce100 = true
+    
+    jQuery(document).ready(function() {
+        
+    var previousScrollTop = [],
+    cards = [],
+    cardScrollHeight = [],
+    cardRotate = [],
+    cardContainer = [],
+    stickyTop = [],
+    stickyCon = []
+    
+    
+    // Sliding crads on scroll
+    
+    function cardSlideUp(){
+    
+    jQuery('.mdw-stacked-card-area').each(function(i){
+        
+        var jQuerythis = jQuery(this),
+        scrollTop = jQuery(document).scrollTop(),
+        cardAreaTop = jQuerythis.offset().top,
+        index = Math.floor((scrollTop - cardAreaTop - stickyTop[i]) / cardScrollHeight[i]),
+        totalCards = cards[i].length
+        
+        cards[i].removeClass('mdw-active-card')
+        cards[i].each(function(j){
+            if( j <= index ) {
+                jQuery(this).addClass('mdw-active-card')
+            }
+            if(index >= -1 && index < totalCards - 1){
+                jQuery(this).css({
+                    'transform': rotate(jQuery{ -1*j*cardRotate[i] + (index+1)*cardRotate[i] }deg)
+                })
+            }
+        })
+        
+        previousScrollTop[i] = scrollTop
+    })
+    
+    }
+    
+    
+    function setValues(){
+    
+    jQuery('.mdw-stacked-card-area').each(function(i){
+        
+        var jQuerythis = jQuery(this)
+        
+        stickyTop[i] = 0
+        
+        if(stickyCon[i].outerHeight() > jQuery(window).height()){
+            stickyTop[i] = cardContainer[i].offset().top - stickyCon[i].offset().top - jQuery(window).height()/2
+        }
+        stickyCon[i].css('top', -1*stickyTop[i])
+        
+        cardScrollHeight[i] = jQuerythis.css('--card-scroll-height') ? parseInt(jQuerythis.css('--card-scroll-height').trim()) : 400
+        cardRotate[i] = jQuerythis.css('--card-rotate') ? parseInt(jQuerythis.css('--card-rotate').trim()) : 9
+        
+        
+        // Rotating cards
+        
+        cards[i].each(function(j) {
+            jQuery(this).css({
+                'transform': rotate(-jQuery{j * cardRotate[i]}deg),
+                'z-index': cards[i].length - j
+            })
+        })
+    
+    
+        // Card area height
+        
+        jQuerythis.css('height', stickyCon[i].outerHeight() +  ((cards[i].length - 1) * cardScrollHeight[i]) + 'px' )
+    })
+    
+    }
+    
+    jQuery(document).on('scroll', cardSlideUp)
+    jQuery(window).on('resize', function(){
+        setValues()
+        cardSlideUp()
+    })
+    
+    
+    function init(){
+    
+    jQuery('.mdw-stacked-card-area').each(function(i){
+        
+        var jQuerythis = jQuery(this)
+        
+        cards[i] = jQuerythis.find('.mdw-stacked-cards > .e-con, .mdw-stacked-cards > .e-container, .mdw-stacked-cards > .e-con-inner > .e-con, .mdw-stacked-cards > .e-con-inner > .e-container')
+        stickyCon[i] = jQuerythis.children('.e-con, .e-container').eq(0)
+        
+        stickyCon[i].parents().each(function(){
+            if( !jQuery(this).is('html') ){ jQuery(this).css('overflow', 'visible') }
+        })
+        
+        previousScrollTop[i] = jQuery(document).scrollTop()
+        cardContainer[i] = jQuerythis.find('.mdw-stacked-cards')
+    })
+    
+    setValues()
+    cardSlideUp()
+    
+    }
+    
+    init()
+        
+    })
+    }
+    </script>
